@@ -18,10 +18,10 @@
 
 ### `$ whoami`
 
-builder. i make tools for builders. currently shipping AI-powered dev tools and open source infrastructure.
+builder. i make tools for builders. currently shipping AI-powered dev tools and open source infrastructure. cozy, as one should imagine.
 
 - building at **[@premian-labs](https://github.com/premian-labs)**
-- crafting **Claude Code skills** and **AI agent tooling**
+- crafting **Claude Code skills** and **Agentic tooling**
 - mass adoption idealist — interfaces should feel like magic
 
 ---
