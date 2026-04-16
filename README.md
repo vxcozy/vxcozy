@@ -18,7 +18,7 @@
 
 ### `$ whoami`
 
-builder. i make tools for builders. currently shipping AI-powered dev tools and open source infrastructure. cozy, as one should imagine.
+an alchemist. i make tools for builders. currently shipping AI-powered dev tools and open source infrastructure. cozy, as one should imagine.
 
 - building at **[@premian-labs](https://github.com/premian-labs)**
 - crafting **Claude Code skills** and **Agentic tooling**
