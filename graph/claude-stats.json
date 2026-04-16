@@ -1,13 +1,13 @@
 {
-  "generated": "2026-04-16T03:27:04.708796+00:00",
+  "generated": "2026-04-16T03:37:52.689062+00:00",
   "accounts": 1,
   "summary": {
     "total_sessions": 79,
-    "total_messages": 33705,
-    "total_user_messages": 13599,
-    "total_assistant_messages": 20106,
-    "total_minutes": 20541,
-    "total_hours": 342.4,
+    "total_messages": 33748,
+    "total_user_messages": 13619,
+    "total_assistant_messages": 20129,
+    "total_minutes": 20562,
+    "total_hours": 342.7,
     "active_days": 11,
     "current_streak": 11,
     "longest_streak": 11
@@ -69,27 +69,27 @@
     },
     "2026-04-15": {
       "sessions": 1,
-      "user_msgs": 407,
-      "assistant_msgs": 583,
-      "minutes": 425.7318666666667
+      "user_msgs": 414,
+      "assistant_msgs": 590,
+      "minutes": 436.0933333333333
     },
     "2026-04-16": {
       "sessions": 1,
-      "user_msgs": 199,
-      "assistant_msgs": 315,
-      "minutes": 84.97665
+      "user_msgs": 212,
+      "assistant_msgs": 331,
+      "minutes": 95.74935
     }
   },
   "projects": {
     "clitunes": {
       "sessions": 5,
-      "messages": 16426,
-      "minutes": 6609.0890500000005
+      "messages": 16440,
+      "minutes": 6619.450516666666
     },
     "campaignai": {
       "sessions": 44,
-      "messages": 11436,
-      "minutes": 12056.265283333327
+      "messages": 11465,
+      "minutes": 12067.037983333326
     },
     "misc": {
       "sessions": 24,
@@ -111,7 +111,7 @@
       "messages": 402,
       "minutes": 589.7790333333334
     },
-    "site": {
+    "cozy-site": {
       "sessions": 1,
       "messages": 86,
       "minutes": 10.942033333333335

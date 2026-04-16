@@ -11,8 +11,8 @@
   <text x="20" y="32" fill="#c9d1d9" font-size="14" font-family="monospace" font-weight="600">claude code</text>
   <text x="20" y="48" fill="#6e7681" font-size="10" font-family="monospace">11 active days across 1 account</text>
 
-  <!-- Stats row -->
-  <text x="20" y="75" fill="#6e7681" font-size="9" font-family="monospace" text-transform="uppercase" letter-spacing="1">sessions</text>
+  <!-- Stats -->
+  <text x="20" y="75" fill="#6e7681" font-size="9" font-family="monospace">sessions</text>
   <text x="20" y="92" fill="#ffffff" font-size="18" font-family="monospace" font-weight="600">79</text>
 
   <text x="110" y="75" fill="#6e7681" font-size="9" font-family="monospace">messages</text>
@@ -42,12 +42,11 @@
     <rect x="20" y="170" width="180" height="12" rx="3" fill="#39d353" opacity="0.30"/>
     <text x="208" y="180" fill="#c9d1d9" font-size="10" font-family="monospace">clitunes (16.4k)</text>
     <rect x="20" y="190" width="125" height="12" rx="3" fill="#39d353" opacity="0.42"/>
-    <text x="153" y="200" fill="#c9d1d9" font-size="10" font-family="monospace">campaignai (11.4k)</text>
+    <text x="153" y="200" fill="#c9d1d9" font-size="10" font-family="monospace">campaignai (11.5k)</text>
     <rect x="20" y="210" width="24" height="12" rx="3" fill="#39d353" opacity="0.54"/>
     <text x="52" y="220" fill="#c9d1d9" font-size="10" font-family="monospace">misc (2.2k)</text>
     <rect x="20" y="230" width="21" height="12" rx="3" fill="#39d353" opacity="0.66"/>
     <text x="49" y="240" fill="#c9d1d9" font-size="10" font-family="monospace">ch4p (2.0k)</text>
     <rect x="20" y="250" width="11" height="12" rx="3" fill="#39d353" opacity="0.78"/>
     <text x="39" y="260" fill="#c9d1d9" font-size="10" font-family="monospace">tome (1.1k)</text>
-
 </svg>
