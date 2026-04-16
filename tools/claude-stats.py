@@ -183,6 +183,26 @@ def parse_desktop_sessions() -> list[dict]:
 # Aggregation — merge JSONL + desktop metadata, dedup by cli_session_id
 # ---------------------------------------------------------------------------
 
+def _get_first_token_date(dirs: list[str]) -> str | None:
+    """Read claudeCodeFirstTokenDate from any Claude config backup or state file."""
+    for claude_dir in dirs:
+        claude_dir = os.path.expanduser(claude_dir)
+        # Check backups (most reliable) then main config
+        candidates = sorted(glob.glob(os.path.join(claude_dir, "backups", ".claude.json.backup.*")))
+        if not candidates:
+            candidates = glob.glob(os.path.join(claude_dir, ".claude.json"))
+        for path in candidates[:1]:
+            try:
+                with open(path) as f:
+                    data = json.load(f)
+                date_str = data.get("claudeCodeFirstTokenDate", "")
+                if date_str:
+                    return date_str[:10]  # "2026-01-12"
+            except (json.JSONDecodeError, OSError):
+                continue
+    return None
+
+
 def resolve_project_from_path(proj_dir_name: str) -> str:
     """Extract a clean project name from an encoded Claude project directory name."""
     name = proj_dir_name
@@ -258,9 +278,26 @@ def aggregate(dirs: list[str]) -> dict:
         proj = session.get("project", "misc")
         project_tokens[proj] += session["input_tokens"] + session["output_tokens"]
 
+    # Backfill: inject a baseline session for every day from first token date
+    # to the earliest real data point. These get replaced as real data accumulates.
     all_days = set(daily.keys())
+    first_token_date = _get_first_token_date(dirs)
+    today = datetime.now().strftime("%Y-%m-%d")
+    if first_token_date:
+        cursor = first_token_date
+        while cursor <= today:
+            if cursor not in all_days:
+                all_days.add(cursor)
+                daily[cursor] = {
+                    "sessions": 1, "user_msgs": 0, "assistant_msgs": 0,
+                    "input_tokens": 0, "output_tokens": 0, "minutes": 0,
+                    "backfilled": True,
+                }
+            cursor = (datetime.strptime(cursor, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
+
+    # Compute summaries AFTER backfill
     current_streak, longest_streak = compute_streaks(sorted(all_days))
-    total_sessions = sum(d["sessions"] for d in daily.values())
+    total_sessions = sum(d["sessions"] for d in daily.values() if not d.get("backfilled"))
     total_messages = sum(d["user_msgs"] + d["assistant_msgs"] for d in daily.values())
     total_tokens = sum(d["input_tokens"] + d["output_tokens"] for d in daily.values())
 

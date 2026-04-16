@@ -1,17 +1,323 @@
 {
-  "generated": "2026-04-16T04:12:03.530635+00:00",
+  "generated": "2026-04-16T04:22:08.116508+00:00",
   "accounts": 2,
   "summary": {
     "total_sessions": 100,
-    "total_messages": 36161,
-    "total_tokens": 4128421410,
-    "active_days": 23,
-    "current_streak": 11,
-    "longest_streak": 11,
+    "total_messages": 36276,
+    "total_tokens": 4140800213,
+    "active_days": 95,
+    "current_streak": 95,
+    "longest_streak": 95,
     "peak_hour": 3,
     "favorite_model": "claude-opus-4-6"
   },
   "daily": {
+    "2026-01-12": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-13": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-14": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-15": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-16": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-17": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-18": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-19": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-20": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-21": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-22": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-23": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-24": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-25": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-26": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-27": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-28": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-29": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-30": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-01-31": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-01": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-02": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-03": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-04": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-05": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-06": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-07": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-08": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-09": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-10": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-11": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-12": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-13": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-14": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
     "2026-02-15": {
       "sessions": 2,
       "user_msgs": 93,
@@ -28,6 +334,24 @@
       "output_tokens": 0,
       "minutes": 11236.60045
     },
+    "2026-02-17": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-18": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
     "2026-02-19": {
       "sessions": 1,
       "user_msgs": 0,
@@ -35,6 +359,51 @@
       "input_tokens": 0,
       "output_tokens": 0,
       "minutes": 507.2682833333334
+    },
+    "2026-02-20": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-21": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-22": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-23": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-02-24": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
     },
     "2026-02-25": {
       "sessions": 2,
@@ -44,6 +413,15 @@
       "output_tokens": 0,
       "minutes": 44.85433333333333
     },
+    "2026-02-26": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
     "2026-02-27": {
       "sessions": 1,
       "user_msgs": 8,
@@ -51,6 +429,87 @@
       "input_tokens": 0,
       "output_tokens": 0,
       "minutes": 40377.16606666667
+    },
+    "2026-02-28": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-01": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-02": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-03": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-04": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-05": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-06": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-07": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-08": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
     },
     "2026-03-09": {
       "sessions": 1,
@@ -60,6 +519,24 @@
       "output_tokens": 0,
       "minutes": 31966.937983333333
     },
+    "2026-03-10": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-11": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
     "2026-03-12": {
       "sessions": 4,
       "user_msgs": 34,
@@ -67,6 +544,105 @@
       "input_tokens": 0,
       "output_tokens": 0,
       "minutes": 15982.507199999998
+    },
+    "2026-03-13": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-14": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-15": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-16": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-17": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-18": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-19": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-20": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-21": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-22": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-23": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
     },
     "2026-03-24": {
       "sessions": 1,
@@ -92,6 +668,42 @@
       "output_tokens": 0,
       "minutes": 3010.4588666666664
     },
+    "2026-03-27": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-28": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-29": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-03-30": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
     "2026-03-31": {
       "sessions": 4,
       "user_msgs": 37,
@@ -107,6 +719,42 @@
       "input_tokens": 0,
       "output_tokens": 0,
       "minutes": 1517.5707666666667
+    },
+    "2026-04-02": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-04-03": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-04-04": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
+    },
+    "2026-04-05": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 0,
+      "backfilled": true
     },
     "2026-04-06": {
       "sessions": 36,
@@ -182,29 +830,29 @@
     },
     "2026-04-15": {
       "sessions": 1,
-      "user_msgs": 460,
-      "assistant_msgs": 661,
-      "input_tokens": 67295395,
-      "output_tokens": 316260,
-      "minutes": 459.678
+      "user_msgs": 484,
+      "assistant_msgs": 700,
+      "input_tokens": 69918082,
+      "output_tokens": 339532,
+      "minutes": 480.81163333333336
     },
     "2026-04-16": {
       "sessions": 1,
-      "user_msgs": 297,
-      "assistant_msgs": 452,
-      "input_tokens": 83338043,
-      "output_tokens": 114973,
-      "minutes": 129.9598
+      "user_msgs": 317,
+      "assistant_msgs": 484,
+      "input_tokens": 93064555,
+      "output_tokens": 121305,
+      "minutes": 140.03651666666667
     }
   },
   "top_projects": [
     [
       "campaignai",
-      2726687186
+      2736420030
     ],
     [
       "clitunes",
-      1088432313
+      1091078272
     ],
     [
       "ch4p",
