@@ -117,6 +117,14 @@ i make tools for builders. currently shipping AI-powered dev tools and open sour
 
 </div>
 
+<div align="center">
+
+<br/>
+
+[![Contribution Constellation](https://img.shields.io/badge/explore_in_3D-contribution_constellation-a78bfa?style=for-the-badge&logo=three.js&logoColor=white)](https://vxcozy.github.io/vxcozy/graph/)
+
+</div>
+
 ---
 
 <div align="center">
