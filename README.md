@@ -50,13 +50,37 @@ builder. i make tools for builders. currently shipping AI-powered dev tools and 
 <tr>
 <td width="50%" valign="top">
 
+<h3 align="center">tome</h3>
+<p align="center">
+<a href="https://github.com/tomehq/tome">
+<img src="https://img.shields.io/github/stars/tomehq/tome?style=for-the-badge&color=a78bfa&labelColor=0d1117&logo=github" />
+</a>
+</p>
+<p align="center">Beautiful documentation that doesn't cost a fortune. Open-source with all of your favorite features.</p>
+
+</td>
+<td width="50%" valign="top">
+
 <h3 align="center">flappyboards</h3>
 <p align="center">
 <a href="https://github.com/vxcozy/flappyboards">
-<img src="https://img.shields.io/badge/114_★-TypeScript-3178C6?style=for-the-badge&logo=github" />
+<img src="https://img.shields.io/github/stars/vxcozy/flappyboards?style=for-the-badge&color=a78bfa&labelColor=0d1117&logo=github" />
 </a>
 </p>
 <p align="center">Turn any TV into a retro split-flap display. Free & open source.</p>
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+<h3 align="center">workflow-orchestration</h3>
+<p align="center">
+<a href="https://github.com/vxcozy/workflow-orchestration">
+<img src="https://img.shields.io/github/stars/vxcozy/workflow-orchestration?style=for-the-badge&color=a78bfa&labelColor=0d1117&logo=github" />
+</a>
+</p>
+<p align="center">Claude Code skill for disciplined task execution with planning, verification, and self-improvement loops.</p>
 
 </td>
 <td width="50%" valign="top">
@@ -64,34 +88,10 @@ builder. i make tools for builders. currently shipping AI-powered dev tools and 
 <h3 align="center">sanitize</h3>
 <p align="center">
 <a href="https://github.com/vxcozy/sanitize">
-<img src="https://img.shields.io/badge/19_★-Shell-4EAA25?style=for-the-badge&logo=github" />
+<img src="https://img.shields.io/github/stars/vxcozy/sanitize?style=for-the-badge&color=a78bfa&labelColor=0d1117&logo=github" />
 </a>
 </p>
 <p align="center">12-point pre-commit hook for blocking secrets, credentials, and sensitive data.</p>
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-<h3 align="center">architect-system</h3>
-<p align="center">
-<a href="https://github.com/vxcozy/architect-system">
-<img src="https://img.shields.io/badge/3_★-Claude_Code-A78BFA?style=for-the-badge&logo=github" />
-</a>
-</p>
-<p align="center">5 interconnected AI skills that form a compounding loop. Audit, Architect, Analyst, Refinery, Compounder.</p>
-
-</td>
-<td width="50%" valign="top">
-
-<h3 align="center">constellation</h3>
-<p align="center">
-<a href="https://github.com/vxcozy/constellation">
-<img src="https://img.shields.io/badge/new-TypeScript-3178C6?style=for-the-badge&logo=github" />
-</a>
-</p>
-<p align="center">Interactive 3D portfolio constellation — hub-and-spoke graph with React Three Fiber.</p>
 
 </td>
 </tr>
@@ -104,7 +104,7 @@ builder. i make tools for builders. currently shipping AI-powered dev tools and 
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=vxcozy&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=a78bfa&icon_color=a78bfa&text_color=c9d1d9&ring_color=a78bfa" />
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=vxcozy&show_icons=true&include_all_commits=true&count_private=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=a78bfa&icon_color=a78bfa&text_color=c9d1d9&ring_color=a78bfa" />
 <img height="180em" src="https://github-readme-streak-stats.herokuapp.com/?user=vxcozy&theme=tokyonight&hide_border=true&background=0d1117&ring=a78bfa&fire=a78bfa&currStreakLabel=a78bfa&sideLabels=c9d1d9&dates=6e7681" />
 
 </div>
