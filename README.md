@@ -101,6 +101,16 @@ i make tools for builders. currently shipping AI-powered dev tools and open sour
 
 ---
 
+### claude code
+
+<div align="center">
+
+<img src="graph/claude-card.svg" width="420" />
+
+</div>
+
+---
+
 ### stats
 
 <div align="center">

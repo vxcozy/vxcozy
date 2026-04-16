@@ -1,0 +1,125 @@
+{
+  "generated": "2026-04-16T03:27:04.708796+00:00",
+  "accounts": 1,
+  "summary": {
+    "total_sessions": 79,
+    "total_messages": 33705,
+    "total_user_messages": 13599,
+    "total_assistant_messages": 20106,
+    "total_minutes": 20541,
+    "total_hours": 342.4,
+    "active_days": 11,
+    "current_streak": 11,
+    "longest_streak": 11
+  },
+  "daily": {
+    "2026-04-06": {
+      "sessions": 36,
+      "user_msgs": 595,
+      "assistant_msgs": 823,
+      "minutes": 1218.32995
+    },
+    "2026-04-07": {
+      "sessions": 5,
+      "user_msgs": 2856,
+      "assistant_msgs": 4548,
+      "minutes": 10392.765699999998
+    },
+    "2026-04-08": {
+      "sessions": 7,
+      "user_msgs": 62,
+      "assistant_msgs": 72,
+      "minutes": 9.369666666666667
+    },
+    "2026-04-09": {
+      "sessions": 6,
+      "user_msgs": 128,
+      "assistant_msgs": 194,
+      "minutes": 119.51554999999999
+    },
+    "2026-04-10": {
+      "sessions": 9,
+      "user_msgs": 1359,
+      "assistant_msgs": 1991,
+      "minutes": 844.3243166666667
+    },
+    "2026-04-11": {
+      "sessions": 4,
+      "user_msgs": 4909,
+      "assistant_msgs": 7103,
+      "minutes": 3802.47655
+    },
+    "2026-04-12": {
+      "sessions": 1,
+      "user_msgs": 174,
+      "assistant_msgs": 228,
+      "minutes": 589.7790333333334
+    },
+    "2026-04-13": {
+      "sessions": 7,
+      "user_msgs": 2810,
+      "assistant_msgs": 4102,
+      "minutes": 3027.736716666667
+    },
+    "2026-04-14": {
+      "sessions": 2,
+      "user_msgs": 100,
+      "assistant_msgs": 147,
+      "minutes": 26.21976666666667
+    },
+    "2026-04-15": {
+      "sessions": 1,
+      "user_msgs": 407,
+      "assistant_msgs": 583,
+      "minutes": 425.7318666666667
+    },
+    "2026-04-16": {
+      "sessions": 1,
+      "user_msgs": 199,
+      "assistant_msgs": 315,
+      "minutes": 84.97665
+    }
+  },
+  "projects": {
+    "clitunes": {
+      "sessions": 5,
+      "messages": 16426,
+      "minutes": 6609.0890500000005
+    },
+    "campaignai": {
+      "sessions": 44,
+      "messages": 11436,
+      "minutes": 12056.265283333327
+    },
+    "misc": {
+      "sessions": 24,
+      "messages": 2246,
+      "minutes": 705.0196333333334
+    },
+    "ch4p": {
+      "sessions": 1,
+      "messages": 1962,
+      "minutes": 263.77945
+    },
+    "tome": {
+      "sessions": 1,
+      "messages": 1082,
+      "minutes": 302.8211
+    },
+    "cozy-brain": {
+      "sessions": 1,
+      "messages": 402,
+      "minutes": 589.7790333333334
+    },
+    "site": {
+      "sessions": 1,
+      "messages": 86,
+      "minutes": 10.942033333333335
+    },
+    "K2-compass": {
+      "sessions": 2,
+      "messages": 65,
+      "minutes": 3.5301833333333335
+    }
+  }
+}
