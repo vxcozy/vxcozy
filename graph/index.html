@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>cozy - contribution constellation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000000;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+    color: #ffffff;
+  }
+  canvas { display: block; }
+  #overlay {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  #overlay h1 {
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+  }
+  #overlay p {
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+  }
+  #tooltip {
+    position: fixed;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.85);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 20;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  #tooltip .count {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+  #tooltip .date {
+    color: rgba(255,255,255,0.55);
+    margin-top: 2px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+  }
+  #controls {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+  }
+  #controls button {
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    color: rgba(255,255,255,0.4);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  #controls button:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.15); }
+  #controls button.active { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.2); }
+  #back-link {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 10;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  #back-link a {
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    transition: color 0.3s;
+  }
+  #back-link a:hover { color: rgba(255,255,255,0.7); }
+  #hint {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.2);
+    z-index: 10;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="overlay">
+  <h1>contribution constellation</h1>
+  <p id="stats"></p>
+</div>
+
+<div id="tooltip">
+  <div class="count"></div>
+  <div class="date"></div>
+</div>
+
+<div id="hint">drag to orbit &middot; scroll to zoom</div>
+
+<div id="controls">
+  <button class="active" data-view="perspective">perspective</button>
+  <button data-view="top">top</button>
+  <button data-view="front">front</button>
+</div>
+
+<div id="back-link">
+  <a href="https://github.com/vxcozy">github</a>
+  <a href="https://cozy.im">cozy.im</a>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// --- Seeded PRNG (same as cozy.im) ---
+function createRNG(seed) {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+
+// --- Contribution Data ---
+const CONTRIB_DATA = {"totalContributions":1871,"weeks":[{"contributionDays":[{"color":"#9be9a8","contributionCount":6,"date":"2025-04-13"},{"color":"#9be9a8","contributionCount":3,"date":"2025-04-14"},{"color":"#9be9a8","contributionCount":5,"date":"2025-04-15"},{"color":"#9be9a8","contributionCount":2,"date":"2025-04-16"},{"color":"#9be9a8","contributionCount":4,"date":"2025-04-17"},{"color":"#9be9a8","contributionCount":5,"date":"2025-04-18"},{"color":"#9be9a8","contributionCount":2,"date":"2025-04-19"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":2,"date":"2025-04-20"},{"color":"#9be9a8","contributionCount":4,"date":"2025-04-21"},{"color":"#9be9a8","contributionCount":2,"date":"2025-04-22"},{"color":"#9be9a8","contributionCount":3,"date":"2025-04-23"},{"color":"#9be9a8","contributionCount":3,"date":"2025-04-24"},{"color":"#9be9a8","contributionCount":4,"date":"2025-04-25"},{"color":"#9be9a8","contributionCount":2,"date":"2025-04-26"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":6,"date":"2025-04-27"},{"color":"#9be9a8","contributionCount":6,"date":"2025-04-28"},{"color":"#9be9a8","contributionCount":2,"date":"2025-04-29"},{"color":"#ebedf0","contributionCount":0,"date":"2025-04-30"},{"color":"#9be9a8","contributionCount":3,"date":"2025-05-01"},{"color":"#9be9a8","contributionCount":5,"date":"2025-05-02"},{"color":"#9be9a8","contributionCount":5,"date":"2025-05-03"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-05-04"},{"color":"#9be9a8","contributionCount":5,"date":"2025-05-05"},{"color":"#9be9a8","contributionCount":5,"date":"2025-05-06"},{"color":"#9be9a8","contributionCount":8,"date":"2025-05-07"},{"color":"#9be9a8","contributionCount":7,"date":"2025-05-08"},{"color":"#9be9a8","contributionCount":4,"date":"2025-05-09"},{"color":"#9be9a8","contributionCount":2,"date":"2025-05-10"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":6,"date":"2025-05-11"},{"color":"#9be9a8","contributionCount":4,"date":"2025-05-12"},{"color":"#9be9a8","contributionCount":6,"date":"2025-05-13"},{"color":"#9be9a8","contributionCount":6,"date":"2025-05-14"},{"color":"#9be9a8","contributionCount":6,"date":"2025-05-15"},{"color":"#9be9a8","contributionCount":3,"date":"2025-05-16"},{"color":"#9be9a8","contributionCount":2,"date":"2025-05-17"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-05-18"},{"color":"#9be9a8","contributionCount":6,"date":"2025-05-19"},{"color":"#9be9a8","contributionCount":6,"date":"2025-05-20"},{"color":"#9be9a8","contributionCount":2,"date":"2025-05-21"},{"color":"#9be9a8","contributionCount":6,"date":"2025-05-22"},{"color":"#9be9a8","contributionCount":4,"date":"2025-05-23"},{"color":"#ebedf0","contributionCount":0,"date":"2025-05-24"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":4,"date":"2025-05-25"},{"color":"#9be9a8","contributionCount":5,"date":"2025-05-26"},{"color":"#9be9a8","contributionCount":4,"date":"2025-05-27"},{"color":"#9be9a8","contributionCount":2,"date":"2025-05-28"},{"color":"#9be9a8","contributionCount":6,"date":"2025-05-29"},{"color":"#ebedf0","contributionCount":0,"date":"2025-05-30"},{"color":"#ebedf0","contributionCount":0,"date":"2025-05-31"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-06-01"},{"color":"#9be9a8","contributionCount":3,"date":"2025-06-02"},{"color":"#ebedf0","contributionCount":0,"date":"2025-06-03"},{"color":"#9be9a8","contributionCount":3,"date":"2025-06-04"},{"color":"#9be9a8","contributionCount":3,"date":"2025-06-05"},{"color":"#9be9a8","contributionCount":6,"date":"2025-06-06"},{"color":"#9be9a8","contributionCount":6,"date":"2025-06-07"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2025-06-08"},{"color":"#9be9a8","contributionCount":6,"date":"2025-06-09"},{"color":"#9be9a8","contributionCount":6,"date":"2025-06-10"},{"color":"#9be9a8","contributionCount":2,"date":"2025-06-11"},{"color":"#ebedf0","contributionCount":0,"date":"2025-06-12"},{"color":"#9be9a8","contributionCount":2,"date":"2025-06-13"},{"color":"#9be9a8","contributionCount":6,"date":"2025-06-14"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":4,"date":"2025-06-15"},{"color":"#9be9a8","contributionCount":4,"date":"2025-06-16"},{"color":"#9be9a8","contributionCount":4,"date":"2025-06-17"},{"color":"#9be9a8","contributionCount":4,"date":"2025-06-18"},{"color":"#9be9a8","contributionCount":2,"date":"2025-06-19"},{"color":"#9be9a8","contributionCount":5,"date":"2025-06-20"},{"color":"#9be9a8","contributionCount":2,"date":"2025-06-21"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-06-22"},{"color":"#9be9a8","contributionCount":4,"date":"2025-06-23"},{"color":"#9be9a8","contributionCount":5,"date":"2025-06-24"},{"color":"#9be9a8","contributionCount":5,"date":"2025-06-25"},{"color":"#9be9a8","contributionCount":2,"date":"2025-06-26"},{"color":"#9be9a8","contributionCount":3,"date":"2025-06-27"},{"color":"#9be9a8","contributionCount":4,"date":"2025-06-28"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-06-29"},{"color":"#9be9a8","contributionCount":2,"date":"2025-06-30"},{"color":"#9be9a8","contributionCount":2,"date":"2025-07-01"},{"color":"#9be9a8","contributionCount":3,"date":"2025-07-02"},{"color":"#9be9a8","contributionCount":2,"date":"2025-07-03"},{"color":"#9be9a8","contributionCount":6,"date":"2025-07-04"},{"color":"#9be9a8","contributionCount":5,"date":"2025-07-05"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2025-07-06"},{"color":"#9be9a8","contributionCount":13,"date":"2025-07-07"},{"color":"#9be9a8","contributionCount":4,"date":"2025-07-08"},{"color":"#9be9a8","contributionCount":2,"date":"2025-07-09"},{"color":"#9be9a8","contributionCount":4,"date":"2025-07-10"},{"color":"#9be9a8","contributionCount":5,"date":"2025-07-11"},{"color":"#9be9a8","contributionCount":3,"date":"2025-07-12"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":2,"date":"2025-07-13"},{"color":"#9be9a8","contributionCount":2,"date":"2025-07-14"},{"color":"#9be9a8","contributionCount":3,"date":"2025-07-15"},{"color":"#9be9a8","contributionCount":5,"date":"2025-07-16"},{"color":"#9be9a8","contributionCount":3,"date":"2025-07-17"},{"color":"#9be9a8","contributionCount":3,"date":"2025-07-18"},{"color":"#9be9a8","contributionCount":4,"date":"2025-07-19"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":4,"date":"2025-07-20"},{"color":"#9be9a8","contributionCount":6,"date":"2025-07-21"},{"color":"#9be9a8","contributionCount":6,"date":"2025-07-22"},{"color":"#9be9a8","contributionCount":2,"date":"2025-07-23"},{"color":"#9be9a8","contributionCount":4,"date":"2025-07-24"},{"color":"#9be9a8","contributionCount":4,"date":"2025-07-25"},{"color":"#9be9a8","contributionCount":6,"date":"2025-07-26"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":4,"date":"2025-07-27"},{"color":"#9be9a8","contributionCount":6,"date":"2025-07-28"},{"color":"#9be9a8","contributionCount":6,"date":"2025-07-29"},{"color":"#9be9a8","contributionCount":2,"date":"2025-07-30"},{"color":"#9be9a8","contributionCount":2,"date":"2025-07-31"},{"color":"#9be9a8","contributionCount":6,"date":"2025-08-01"},{"color":"#9be9a8","contributionCount":3,"date":"2025-08-02"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":2,"date":"2025-08-03"},{"color":"#ebedf0","contributionCount":0,"date":"2025-08-04"},{"color":"#ebedf0","contributionCount":0,"date":"2025-08-05"},{"color":"#9be9a8","contributionCount":2,"date":"2025-08-06"},{"color":"#9be9a8","contributionCount":4,"date":"2025-08-07"},{"color":"#9be9a8","contributionCount":5,"date":"2025-08-08"},{"color":"#9be9a8","contributionCount":4,"date":"2025-08-09"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-08-10"},{"color":"#9be9a8","contributionCount":5,"date":"2025-08-11"},{"color":"#9be9a8","contributionCount":3,"date":"2025-08-12"},{"color":"#9be9a8","contributionCount":4,"date":"2025-08-13"},{"color":"#9be9a8","contributionCount":2,"date":"2025-08-14"},{"color":"#9be9a8","contributionCount":3,"date":"2025-08-15"},{"color":"#9be9a8","contributionCount":6,"date":"2025-08-16"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":4,"date":"2025-08-17"},{"color":"#9be9a8","contributionCount":5,"date":"2025-08-18"},{"color":"#9be9a8","contributionCount":6,"date":"2025-08-19"},{"color":"#9be9a8","contributionCount":3,"date":"2025-08-20"},{"color":"#9be9a8","contributionCount":4,"date":"2025-08-21"},{"color":"#9be9a8","contributionCount":6,"date":"2025-08-22"},{"color":"#9be9a8","contributionCount":3,"date":"2025-08-23"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-08-24"},{"color":"#9be9a8","contributionCount":3,"date":"2025-08-25"},{"color":"#9be9a8","contributionCount":3,"date":"2025-08-26"},{"color":"#ebedf0","contributionCount":0,"date":"2025-08-27"},{"color":"#9be9a8","contributionCount":2,"date":"2025-08-28"},{"color":"#9be9a8","contributionCount":6,"date":"2025-08-29"},{"color":"#9be9a8","contributionCount":5,"date":"2025-08-30"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-08-31"},{"color":"#9be9a8","contributionCount":2,"date":"2025-09-01"},{"color":"#9be9a8","contributionCount":2,"date":"2025-09-02"},{"color":"#9be9a8","contributionCount":3,"date":"2025-09-03"},{"color":"#9be9a8","contributionCount":6,"date":"2025-09-04"},{"color":"#9be9a8","contributionCount":6,"date":"2025-09-05"},{"color":"#9be9a8","contributionCount":2,"date":"2025-09-06"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":5,"date":"2025-09-07"},{"color":"#9be9a8","contributionCount":6,"date":"2025-09-08"},{"color":"#9be9a8","contributionCount":5,"date":"2025-09-09"},{"color":"#9be9a8","contributionCount":6,"date":"2025-09-10"},{"color":"#9be9a8","contributionCount":6,"date":"2025-09-11"},{"color":"#9be9a8","contributionCount":3,"date":"2025-09-12"},{"color":"#9be9a8","contributionCount":5,"date":"2025-09-13"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-09-14"},{"color":"#9be9a8","contributionCount":4,"date":"2025-09-15"},{"color":"#9be9a8","contributionCount":6,"date":"2025-09-16"},{"color":"#9be9a8","contributionCount":3,"date":"2025-09-17"},{"color":"#9be9a8","contributionCount":2,"date":"2025-09-18"},{"color":"#9be9a8","contributionCount":3,"date":"2025-09-19"},{"color":"#9be9a8","contributionCount":4,"date":"2025-09-20"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":2,"date":"2025-09-21"},{"color":"#9be9a8","contributionCount":3,"date":"2025-09-22"},{"color":"#9be9a8","contributionCount":3,"date":"2025-09-23"},{"color":"#9be9a8","contributionCount":2,"date":"2025-09-24"},{"color":"#9be9a8","contributionCount":4,"date":"2025-09-25"},{"color":"#9be9a8","contributionCount":5,"date":"2025-09-26"},{"color":"#9be9a8","contributionCount":5,"date":"2025-09-27"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":6,"date":"2025-09-28"},{"color":"#ebedf0","contributionCount":0,"date":"2025-09-29"},{"color":"#9be9a8","contributionCount":6,"date":"2025-09-30"},{"color":"#9be9a8","contributionCount":2,"date":"2025-10-01"},{"color":"#ebedf0","contributionCount":0,"date":"2025-10-02"},{"color":"#9be9a8","contributionCount":5,"date":"2025-10-03"},{"color":"#9be9a8","contributionCount":5,"date":"2025-10-04"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":6,"date":"2025-10-05"},{"color":"#9be9a8","contributionCount":3,"date":"2025-10-06"},{"color":"#9be9a8","contributionCount":4,"date":"2025-10-07"},{"color":"#9be9a8","contributionCount":2,"date":"2025-10-08"},{"color":"#9be9a8","contributionCount":5,"date":"2025-10-09"},{"color":"#9be9a8","contributionCount":5,"date":"2025-10-10"},{"color":"#9be9a8","contributionCount":6,"date":"2025-10-11"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":5,"date":"2025-10-12"},{"color":"#9be9a8","contributionCount":2,"date":"2025-10-13"},{"color":"#9be9a8","contributionCount":5,"date":"2025-10-14"},{"color":"#9be9a8","contributionCount":5,"date":"2025-10-15"},{"color":"#9be9a8","contributionCount":4,"date":"2025-10-16"},{"color":"#9be9a8","contributionCount":3,"date":"2025-10-17"},{"color":"#9be9a8","contributionCount":4,"date":"2025-10-18"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":5,"date":"2025-10-19"},{"color":"#9be9a8","contributionCount":5,"date":"2025-10-20"},{"color":"#9be9a8","contributionCount":2,"date":"2025-10-21"},{"color":"#9be9a8","contributionCount":6,"date":"2025-10-22"},{"color":"#9be9a8","contributionCount":4,"date":"2025-10-23"},{"color":"#9be9a8","contributionCount":2,"date":"2025-10-24"},{"color":"#9be9a8","contributionCount":2,"date":"2025-10-25"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-10-26"},{"color":"#9be9a8","contributionCount":2,"date":"2025-10-27"},{"color":"#9be9a8","contributionCount":3,"date":"2025-10-28"},{"color":"#9be9a8","contributionCount":2,"date":"2025-10-29"},{"color":"#9be9a8","contributionCount":3,"date":"2025-10-30"},{"color":"#9be9a8","contributionCount":4,"date":"2025-10-31"},{"color":"#9be9a8","contributionCount":3,"date":"2025-11-01"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":2,"date":"2025-11-02"},{"color":"#9be9a8","contributionCount":3,"date":"2025-11-03"},{"color":"#ebedf0","contributionCount":0,"date":"2025-11-04"},{"color":"#9be9a8","contributionCount":2,"date":"2025-11-05"},{"color":"#ebedf0","contributionCount":0,"date":"2025-11-06"},{"color":"#9be9a8","contributionCount":5,"date":"2025-11-07"},{"color":"#9be9a8","contributionCount":3,"date":"2025-11-08"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-11-09"},{"color":"#9be9a8","contributionCount":4,"date":"2025-11-10"},{"color":"#9be9a8","contributionCount":6,"date":"2025-11-11"},{"color":"#9be9a8","contributionCount":6,"date":"2025-11-12"},{"color":"#9be9a8","contributionCount":4,"date":"2025-11-13"},{"color":"#9be9a8","contributionCount":4,"date":"2025-11-14"},{"color":"#9be9a8","contributionCount":4,"date":"2025-11-15"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":5,"date":"2025-11-16"},{"color":"#9be9a8","contributionCount":2,"date":"2025-11-17"},{"color":"#9be9a8","contributionCount":4,"date":"2025-11-18"},{"color":"#9be9a8","contributionCount":5,"date":"2025-11-19"},{"color":"#9be9a8","contributionCount":5,"date":"2025-11-20"},{"color":"#9be9a8","contributionCount":6,"date":"2025-11-21"},{"color":"#ebedf0","contributionCount":0,"date":"2025-11-22"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":6,"date":"2025-11-23"},{"color":"#9be9a8","contributionCount":5,"date":"2025-11-24"},{"color":"#9be9a8","contributionCount":6,"date":"2025-11-25"},{"color":"#9be9a8","contributionCount":3,"date":"2025-11-26"},{"color":"#9be9a8","contributionCount":2,"date":"2025-11-27"},{"color":"#9be9a8","contributionCount":5,"date":"2025-11-28"},{"color":"#9be9a8","contributionCount":5,"date":"2025-11-29"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":5,"date":"2025-11-30"},{"color":"#9be9a8","contributionCount":5,"date":"2025-12-01"},{"color":"#9be9a8","contributionCount":3,"date":"2025-12-02"},{"color":"#9be9a8","contributionCount":4,"date":"2025-12-03"},{"color":"#9be9a8","contributionCount":4,"date":"2025-12-04"},{"color":"#9be9a8","contributionCount":6,"date":"2025-12-05"},{"color":"#9be9a8","contributionCount":4,"date":"2025-12-06"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":6,"date":"2025-12-07"},{"color":"#ebedf0","contributionCount":0,"date":"2025-12-08"},{"color":"#9be9a8","contributionCount":5,"date":"2025-12-09"},{"color":"#9be9a8","contributionCount":3,"date":"2025-12-10"},{"color":"#9be9a8","contributionCount":5,"date":"2025-12-11"},{"color":"#9be9a8","contributionCount":2,"date":"2025-12-12"},{"color":"#9be9a8","contributionCount":3,"date":"2025-12-13"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-12-14"},{"color":"#9be9a8","contributionCount":6,"date":"2025-12-15"},{"color":"#9be9a8","contributionCount":6,"date":"2025-12-16"},{"color":"#9be9a8","contributionCount":5,"date":"2025-12-17"},{"color":"#ebedf0","contributionCount":0,"date":"2025-12-18"},{"color":"#9be9a8","contributionCount":4,"date":"2025-12-19"},{"color":"#9be9a8","contributionCount":4,"date":"2025-12-20"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":3,"date":"2025-12-21"},{"color":"#9be9a8","contributionCount":3,"date":"2025-12-22"},{"color":"#9be9a8","contributionCount":6,"date":"2025-12-23"},{"color":"#ebedf0","contributionCount":0,"date":"2025-12-24"},{"color":"#9be9a8","contributionCount":3,"date":"2025-12-25"},{"color":"#9be9a8","contributionCount":5,"date":"2025-12-26"},{"color":"#9be9a8","contributionCount":6,"date":"2025-12-27"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2025-12-28"},{"color":"#9be9a8","contributionCount":4,"date":"2025-12-29"},{"color":"#ebedf0","contributionCount":0,"date":"2025-12-30"},{"color":"#9be9a8","contributionCount":4,"date":"2025-12-31"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-01"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-02"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-03"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2026-01-04"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-05"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-06"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-07"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-08"},{"color":"#9be9a8","contributionCount":1,"date":"2026-01-09"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-10"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2026-01-11"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-12"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-13"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-14"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-15"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-16"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-17"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2026-01-18"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-19"},{"color":"#9be9a8","contributionCount":5,"date":"2026-01-20"},{"color":"#40c463","contributionCount":18,"date":"2026-01-21"},{"color":"#9be9a8","contributionCount":5,"date":"2026-01-22"},{"color":"#9be9a8","contributionCount":2,"date":"2026-01-23"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-24"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2026-01-25"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-26"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-27"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-28"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-29"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-30"},{"color":"#ebedf0","contributionCount":0,"date":"2026-01-31"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2026-02-01"},{"color":"#9be9a8","contributionCount":11,"date":"2026-02-02"},{"color":"#ebedf0","contributionCount":0,"date":"2026-02-03"},{"color":"#ebedf0","contributionCount":0,"date":"2026-02-04"},{"color":"#9be9a8","contributionCount":11,"date":"2026-02-05"},{"color":"#9be9a8","contributionCount":13,"date":"2026-02-06"},{"color":"#40c463","contributionCount":16,"date":"2026-02-07"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":10,"date":"2026-02-08"},{"color":"#9be9a8","contributionCount":9,"date":"2026-02-09"},{"color":"#9be9a8","contributionCount":6,"date":"2026-02-10"},{"color":"#9be9a8","contributionCount":3,"date":"2026-02-11"},{"color":"#40c463","contributionCount":17,"date":"2026-02-12"},{"color":"#9be9a8","contributionCount":11,"date":"2026-02-13"},{"color":"#ebedf0","contributionCount":0,"date":"2026-02-14"}]},{"contributionDays":[{"color":"#40c463","contributionCount":21,"date":"2026-02-15"},{"color":"#9be9a8","contributionCount":12,"date":"2026-02-16"},{"color":"#40c463","contributionCount":18,"date":"2026-02-17"},{"color":"#9be9a8","contributionCount":1,"date":"2026-02-18"},{"color":"#9be9a8","contributionCount":9,"date":"2026-02-19"},{"color":"#ebedf0","contributionCount":0,"date":"2026-02-20"},{"color":"#ebedf0","contributionCount":0,"date":"2026-02-21"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2026-02-22"},{"color":"#30a14e","contributionCount":35,"date":"2026-02-23"},{"color":"#9be9a8","contributionCount":14,"date":"2026-02-24"},{"color":"#40c463","contributionCount":27,"date":"2026-02-25"},{"color":"#40c463","contributionCount":23,"date":"2026-02-26"},{"color":"#9be9a8","contributionCount":4,"date":"2026-02-27"},{"color":"#ebedf0","contributionCount":0,"date":"2026-02-28"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":2,"date":"2026-03-01"},{"color":"#40c463","contributionCount":22,"date":"2026-03-02"},{"color":"#9be9a8","contributionCount":15,"date":"2026-03-03"},{"color":"#9be9a8","contributionCount":6,"date":"2026-03-04"},{"color":"#9be9a8","contributionCount":4,"date":"2026-03-05"},{"color":"#40c463","contributionCount":16,"date":"2026-03-06"},{"color":"#9be9a8","contributionCount":12,"date":"2026-03-07"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2026-03-08"},{"color":"#40c463","contributionCount":29,"date":"2026-03-09"},{"color":"#40c463","contributionCount":17,"date":"2026-03-10"},{"color":"#40c463","contributionCount":27,"date":"2026-03-11"},{"color":"#40c463","contributionCount":19,"date":"2026-03-12"},{"color":"#9be9a8","contributionCount":14,"date":"2026-03-13"},{"color":"#9be9a8","contributionCount":6,"date":"2026-03-14"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":5,"date":"2026-03-15"},{"color":"#40c463","contributionCount":18,"date":"2026-03-16"},{"color":"#9be9a8","contributionCount":6,"date":"2026-03-17"},{"color":"#9be9a8","contributionCount":5,"date":"2026-03-18"},{"color":"#9be9a8","contributionCount":13,"date":"2026-03-19"},{"color":"#40c463","contributionCount":26,"date":"2026-03-20"},{"color":"#9be9a8","contributionCount":1,"date":"2026-03-21"}]},{"contributionDays":[{"color":"#9be9a8","contributionCount":1,"date":"2026-03-22"},{"color":"#9be9a8","contributionCount":1,"date":"2026-03-23"},{"color":"#40c463","contributionCount":16,"date":"2026-03-24"},{"color":"#30a14e","contributionCount":37,"date":"2026-03-25"},{"color":"#9be9a8","contributionCount":13,"date":"2026-03-26"},{"color":"#9be9a8","contributionCount":12,"date":"2026-03-27"},{"color":"#9be9a8","contributionCount":4,"date":"2026-03-28"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2026-03-29"},{"color":"#ebedf0","contributionCount":0,"date":"2026-03-30"},{"color":"#9be9a8","contributionCount":9,"date":"2026-03-31"},{"color":"#ebedf0","contributionCount":0,"date":"2026-04-01"},{"color":"#30a14e","contributionCount":34,"date":"2026-04-02"},{"color":"#9be9a8","contributionCount":1,"date":"2026-04-03"},{"color":"#ebedf0","contributionCount":0,"date":"2026-04-04"}]},{"contributionDays":[{"color":"#ebedf0","contributionCount":0,"date":"2026-04-05"},{"color":"#9be9a8","contributionCount":4,"date":"2026-04-06"},{"color":"#9be9a8","contributionCount":5,"date":"2026-04-07"},{"color":"#9be9a8","contributionCount":3,"date":"2026-04-08"},{"color":"#40c463","contributionCount":16,"date":"2026-04-09"},{"color":"#40c463","contributionCount":29,"date":"2026-04-10"},{"color":"#216e39","contributionCount":63,"date":"2026-04-11"}]},{"contributionDays":[{"color":"#30a14e","contributionCount":40,"date":"2026-04-12"},{"color":"#9be9a8","contributionCount":9,"date":"2026-04-13"},{"color":"#40c463","contributionCount":21,"date":"2026-04-14"},{"color":"#9be9a8","contributionCount":9,"date":"2026-04-15"}]}]};
+const weeks = CONTRIB_DATA.weeks;
+const maxCount = Math.max(...weeks.flatMap(w => w.contributionDays.map(d => d.contributionCount)), 1);
+
+// --- Scene ---
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(0, 2, 14);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x000000);
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enablePan = false;
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.minDistance = 2;
+controls.maxDistance = 18;
+controls.rotateSpeed = 0.5;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.15;
+
+// --- Lighting (minimal, like cozy.im) ---
+const ambient = new THREE.AmbientLight(0xffffff, 0.08);
+scene.add(ambient);
+
+// --- Layout ---
+const cellSpacing = 0.38;
+// Focus points for zoom-based target shifting
+const centerX = 0;
+const recentX = (weeks.length - 1 - weeks.length / 2) * cellSpacing;
+const gridGroup = new THREE.Group();
+const hitboxes = [];
+const nodeData = []; // store per-node info for animations
+
+// Green contribution scale → glow colors
+const TIER_COLORS = [
+  { base: 0x222222, glow: 0x333333 },    // 0: no contributions (dim)
+  { base: 0x0e4429, glow: 0x1a5c3a },    // 1: low
+  { base: 0x006d32, glow: 0x00913e },     // 2: medium-low
+  { base: 0x26a641, glow: 0x32c755 },     // 3: medium
+  { base: 0x39d353, glow: 0x4de86a },     // 4: high
+];
+
+function getTier(count) {
+  if (count === 0) return 0;
+  const pct = count / maxCount;
+  if (pct <= 0.2) return 1;
+  if (pct <= 0.4) return 2;
+  if (pct <= 0.7) return 3;
+  return 4;
+}
+
+// --- Create contribution nodes (layered glow spheres, cozy.im style) ---
+const rng = createRNG(42);
+
+weeks.forEach((week, wi) => {
+  week.contributionDays.forEach((day, di) => {
+    const count = day.contributionCount;
+    const tier = getTier(count);
+    const colors = TIER_COLORS[tier];
+
+    const x = (wi - weeks.length / 2) * cellSpacing;
+    const z = (di - 3) * cellSpacing;
+    const y = 0;
+
+    const baseSize = count === 0 ? 0.04 : 0.06 + (count / maxCount) * 0.12;
+    const idHash = wi * 7 + di;
+
+    const group = new THREE.Group();
+    group.position.set(x, y, z);
+
+    if (count > 0) {
+      // Core sphere (brightest, smallest)
+      const coreGeo = new THREE.SphereGeometry(baseSize, 16, 16);
+      const coreMat = new THREE.MeshBasicMaterial({
+        color: colors.base,
+        transparent: true,
+        opacity: 0.9,
+        depthWrite: false,
+      });
+      const core = new THREE.Mesh(coreGeo, coreMat);
+      group.add(core);
+
+      // Inner glow
+      const innerGeo = new THREE.SphereGeometry(baseSize, 12, 12);
+      const innerMat = new THREE.MeshBasicMaterial({
+        color: colors.glow,
+        transparent: true,
+        opacity: 0.08,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+      const inner = new THREE.Mesh(innerGeo, innerMat);
+      inner.scale.setScalar(1.8);
+      group.add(inner);
+
+      // Outer halo
+      const outerGeo = new THREE.SphereGeometry(baseSize, 8, 8);
+      const outerMat = new THREE.MeshBasicMaterial({
+        color: colors.glow,
+        transparent: true,
+        opacity: 0.03,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+      const outer = new THREE.Mesh(outerGeo, outerMat);
+      outer.scale.setScalar(3.2);
+      group.add(outer);
+    } else {
+      // Empty day — tiny dim dot
+      const dotGeo = new THREE.SphereGeometry(0.02, 6, 6);
+      const dotMat = new THREE.MeshBasicMaterial({
+        color: 0x222222,
+        transparent: true,
+        opacity: 0.15,
+        depthWrite: false,
+      });
+      group.add(new THREE.Mesh(dotGeo, dotMat));
+    }
+
+    // Invisible hitbox
+    const hitGeo = new THREE.BoxGeometry(cellSpacing * 0.9, cellSpacing * 0.9, cellSpacing * 0.9);
+    const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+    const hitbox = new THREE.Mesh(hitGeo, hitMat);
+    hitbox.userData = { date: day.date, count, tier, wi, di, group, idHash };
+    group.add(hitbox);
+    hitboxes.push(hitbox);
+
+    nodeData.push({
+      group, count, tier, baseSize, idHash,
+      pulseSpeed: count > 0 ? 1.2 + (idHash % 10) * 0.08 : 0,
+      pulseAmp: count > 0 ? 0.18 : 0,
+      basePos: new THREE.Vector3(x, y, z),
+    });
+
+    gridGroup.add(group);
+  });
+});
+
+scene.add(gridGroup);
+
+// --- Neural Web Strands (connecting active days, cozy.im style) ---
+const strandCount = 40;
+const strandRNG = createRNG(88888);
+const strands = [];
+
+// Find bounds of active contributions
+const activeDays = nodeData.filter(n => n.count > 0);
+if (activeDays.length > 2) {
+  const bounds = {
+    minX: Math.min(...activeDays.map(n => n.basePos.x)),
+    maxX: Math.max(...activeDays.map(n => n.basePos.x)),
+    minZ: Math.min(...activeDays.map(n => n.basePos.z)),
+    maxZ: Math.max(...activeDays.map(n => n.basePos.z)),
+  };
+  const shrink = 0.3;
+  const bx = (bounds.maxX - bounds.minX) * shrink;
+  const bz = (bounds.maxZ - bounds.minZ) * shrink;
+  const cx = (bounds.minX + bounds.maxX) / 2;
+  const cz = (bounds.minZ + bounds.maxZ) / 2;
+
+  for (let i = 0; i < strandCount; i++) {
+    const points = [];
+    const p0 = new THREE.Vector3(cx + (strandRNG() - 0.5) * bx * 2, (strandRNG() - 0.5) * 0.6, cz + (strandRNG() - 0.5) * bz * 2);
+    const p3 = new THREE.Vector3(cx + (strandRNG() - 0.5) * bx * 2, (strandRNG() - 0.5) * 0.6, cz + (strandRNG() - 0.5) * bz * 2);
+    const p1 = new THREE.Vector3(
+      p0.x + (strandRNG() - 0.5) * bx,
+      (strandRNG() - 0.5) * 0.8,
+      p0.z + (strandRNG() - 0.5) * bz
+    );
+    const p2 = new THREE.Vector3(
+      p3.x + (strandRNG() - 0.5) * bx,
+      (strandRNG() - 0.5) * 0.8,
+      p3.z + (strandRNG() - 0.5) * bz
+    );
+
+    const curve = new THREE.CubicBezierCurve3(p0, p1, p2, p3);
+    const geo = new THREE.BufferGeometry().setFromPoints(curve.getPoints(20));
+    const mat = new THREE.LineBasicMaterial({
+      color: 0x39d353,
+      transparent: true,
+      opacity: 0.02,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const line = new THREE.Line(geo, mat);
+    gridGroup.add(line);
+
+    strands.push({
+      line,
+      speed: 0.2 + strandRNG() * 0.6,
+      phase: strandRNG() * Math.PI * 2,
+      baseOpacity: 0.01 + strandRNG() * 0.025,
+      peakOpacity: 0.05,
+    });
+  }
+}
+
+// --- Core Particles (dense, around contribution area) ---
+const coreParticleCount = 1500;
+const coreRNG = createRNG(77777);
+const coreParticleGeo = new THREE.SphereGeometry(1, 6, 6);
+const coreParticleMat = new THREE.MeshBasicMaterial({
+  color: 0x39d353,
+  transparent: true,
+  opacity: 0.08,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+});
+const coreParticles = new THREE.InstancedMesh(coreParticleGeo, coreParticleMat, coreParticleCount);
+const coreParticleData = [];
+const dummy = new THREE.Object3D();
+
+for (let i = 0; i < coreParticleCount; i++) {
+  const theta = coreRNG() * Math.PI * 2;
+  const phi = Math.acos(2 * coreRNG() - 1);
+  const r = coreRNG() * 12;
+  const x = r * Math.sin(phi) * Math.cos(theta);
+  const y = (coreRNG() - 0.5) * 2;
+  const z = r * Math.sin(phi) * Math.sin(theta) * 0.3;
+
+  coreParticleData.push({
+    base: new THREE.Vector3(x, y, z),
+    speed: 0.008 + coreRNG() * 0.015,
+    drift: 0.3 + coreRNG() * 0.8,
+    offset: coreRNG() * Math.PI * 2,
+    scale: 0.008 + coreRNG() * 0.012,
+  });
+
+  dummy.position.set(x, y, z);
+  dummy.scale.setScalar(0.01);
+  dummy.updateMatrix();
+  coreParticles.setMatrixAt(i, dummy.matrix);
+}
+coreParticles.instanceMatrix.needsUpdate = true;
+scene.add(coreParticles);
+
+// --- Ambient Particles (sparse, wider) ---
+const ambientCount = 800;
+const ambientRNG = createRNG(12345);
+const ambientGeo = new THREE.SphereGeometry(1, 8, 8);
+const ambientMat = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  transparent: true,
+  opacity: 0.04,
+  depthWrite: false,
+});
+const ambientParticles = new THREE.InstancedMesh(ambientGeo, ambientMat, ambientCount);
+const ambientData = [];
+
+for (let i = 0; i < ambientCount; i++) {
+  const x = (ambientRNG() - 0.5) * 40;
+  const y = (ambientRNG() - 0.5) * 15;
+  const z = (ambientRNG() - 0.5) * 20;
+  ambientData.push({
+    base: new THREE.Vector3(x, y, z),
+    speed: 0.002 + ambientRNG() * 0.005,
+    offset: ambientRNG() * Math.PI * 2,
+    scale: 0.012 + ambientRNG() * 0.01,
+  });
+  dummy.position.set(x, y, z);
+  dummy.scale.setScalar(0.012);
+  dummy.updateMatrix();
+  ambientParticles.setMatrixAt(i, dummy.matrix);
+}
+ambientParticles.instanceMatrix.needsUpdate = true;
+scene.add(ambientParticles);
+
+// --- Stats ---
+document.getElementById('stats').textContent =
+  `${CONTRIB_DATA.totalContributions.toLocaleString()} contributions`;
+
+// --- Tooltip + Hover ---
+const tooltip = document.getElementById('tooltip');
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hoveredNode = null;
+
+function setNodeHighlight(userData, highlighted) {
+  const group = userData.group;
+  group.children.forEach(child => {
+    if (!child.isMesh || !child.material.visible === false) return;
+    if (child.material.blending === THREE.AdditiveBlending) {
+      child.material.opacity = highlighted ? 0.25 : (child.geometry.parameters?.radius > 0.1 ? 0.03 : 0.08);
+    }
+  });
+  // Scale up the whole cell on hover
+  const s = highlighted ? 1.8 : 1.0;
+  group.scale.setScalar(s);
+}
+
+renderer.domElement.addEventListener('mousemove', (e) => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(hitboxes);
+
+  if (hoveredNode) {
+    setNodeHighlight(hoveredNode.userData, false);
+    // Dim restoration handled in render loop
+  }
+
+  if (intersects.length > 0) {
+    const hit = intersects[0].object;
+    hoveredNode = hit;
+    setNodeHighlight(hit.userData, true);
+
+    const d = hit.userData;
+    const dateStr = new Date(d.date + 'T12:00:00').toLocaleDateString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
+    });
+    tooltip.querySelector('.count').textContent =
+      d.count === 0 ? 'no contributions' : `${d.count} contribution${d.count !== 1 ? 's' : ''}`;
+    tooltip.querySelector('.date').textContent = dateStr;
+    tooltip.style.opacity = '1';
+    tooltip.style.left = e.clientX + 16 + 'px';
+    tooltip.style.top = e.clientY - 16 + 'px';
+    renderer.domElement.style.cursor = 'pointer';
+  } else {
+    hoveredNode = null;
+    tooltip.style.opacity = '0';
+    renderer.domElement.style.cursor = 'default';
+  }
+});
+
+// --- Camera Views ---
+const viewPositions = {
+  perspective: { pos: [4, 4, 12], target: [centerX, 0, 0] },
+  top: { pos: [centerX, 16, 0.01], target: [centerX, 0, 0] },
+  front: { pos: [centerX, 1.2, 12], target: [centerX, 0, 0] },
+};
+
+document.querySelectorAll('#controls button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#controls button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const view = viewPositions[btn.dataset.view];
+    animateCamera(view.pos, view.target);
+  });
+});
+
+function animateCamera(targetPos, targetLook) {
+  const startPos = camera.position.clone();
+  const startTarget = controls.target.clone();
+  const endPos = new THREE.Vector3(...targetPos);
+  const endTarget = new THREE.Vector3(...targetLook);
+  const duration = 1200;
+  const startTime = performance.now();
+
+  function step(now) {
+    const t = Math.min((now - startTime) / duration, 1);
+    const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    camera.position.lerpVectors(startPos, endPos, ease);
+    controls.target.lerpVectors(startTarget, endTarget, ease);
+    controls.update();
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// Start centered on full grid
+camera.position.set(4, 4, 12);
+controls.target.set(centerX, 0, 0);
+controls.update();
+
+// --- Render Loop ---
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  const delta = clock.getDelta();
+
+  // Dynamic zoom-based target: centered when far, recent when close
+  const dist = camera.position.distanceTo(controls.target);
+  const zoomT = 1 - Math.min(Math.max((dist - controls.minDistance) / (controls.maxDistance - controls.minDistance), 0), 1);
+  // zoomT: 0 = fully zoomed out, 1 = fully zoomed in
+  const goalX = centerX + zoomT * (recentX - centerX);
+  controls.target.x += (goalX - controls.target.x) * 0.04;
+
+  // Scene drift (subtle, like cozy.im)
+  gridGroup.rotation.y = Math.sin(t * 0.05) * 0.04;
+  gridGroup.rotation.x = Math.cos(t * 0.03) * 0.015;
+
+  // Node pulse animation
+  nodeData.forEach(node => {
+    if (node.count === 0) return;
+    if (hoveredNode && hoveredNode.userData.group === node.group) return; // skip hovered
+    const pulse = 1 + Math.sin(t * node.pulseSpeed + node.idHash) * node.pulseAmp;
+    node.group.scale.setScalar(pulse);
+  });
+
+  // Neural web plasma pulse
+  strands.forEach(s => {
+    const pulse = Math.sin(t * s.speed + s.phase) * 0.5 + 0.5;
+    s.line.material.opacity = s.baseOpacity + pulse * (s.peakOpacity - s.baseOpacity);
+  });
+
+  // Core particles animation
+  for (let i = 0; i < coreParticleCount; i++) {
+    const p = coreParticleData[i];
+    dummy.position.set(
+      p.base.x + Math.sin(t * p.speed + p.offset) * p.drift,
+      p.base.y + Math.cos(t * p.speed * 1.3 + p.offset) * p.drift * 0.4,
+      p.base.z + Math.sin(t * p.speed * 0.8 + p.offset * 1.7) * p.drift
+    );
+    const flicker = p.scale + Math.sin(t * 2 + i) * 0.004;
+    dummy.scale.setScalar(flicker);
+    dummy.updateMatrix();
+    coreParticles.setMatrixAt(i, dummy.matrix);
+  }
+  coreParticles.instanceMatrix.needsUpdate = true;
+
+  // Ambient particles animation
+  for (let i = 0; i < ambientCount; i++) {
+    const p = ambientData[i];
+    dummy.position.set(
+      p.base.x + Math.sin(t * p.speed + p.offset) * 0.5,
+      p.base.y + Math.cos(t * p.speed * 0.7 + p.offset) * 0.3,
+      p.base.z + Math.sin(t * p.speed * 0.5 + p.offset) * 0.4
+    );
+    dummy.scale.setScalar(p.scale + Math.sin(t * 0.8 + p.offset) * 0.005);
+    dummy.updateMatrix();
+    ambientParticles.setMatrixAt(i, dummy.matrix);
+  }
+  ambientParticles.instanceMatrix.needsUpdate = true;
+
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+// --- Resize ---
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
