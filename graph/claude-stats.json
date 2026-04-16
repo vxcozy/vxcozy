@@ -1,17 +1,113 @@
 {
-  "generated": "2026-04-16T03:58:44.756451+00:00",
+  "generated": "2026-04-16T04:12:03.530635+00:00",
   "accounts": 2,
   "summary": {
-    "total_sessions": 79,
-    "total_messages": 34003,
-    "total_tokens": 4116622600,
-    "active_days": 11,
+    "total_sessions": 100,
+    "total_messages": 36161,
+    "total_tokens": 4128421410,
+    "active_days": 23,
     "current_streak": 11,
     "longest_streak": 11,
     "peak_hour": 3,
     "favorite_model": "claude-opus-4-6"
   },
   "daily": {
+    "2026-02-15": {
+      "sessions": 2,
+      "user_msgs": 93,
+      "assistant_msgs": 93,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 64401.20425
+    },
+    "2026-02-16": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 11236.60045
+    },
+    "2026-02-19": {
+      "sessions": 1,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 507.2682833333334
+    },
+    "2026-02-25": {
+      "sessions": 2,
+      "user_msgs": 0,
+      "assistant_msgs": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 44.85433333333333
+    },
+    "2026-02-27": {
+      "sessions": 1,
+      "user_msgs": 8,
+      "assistant_msgs": 8,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 40377.16606666667
+    },
+    "2026-03-09": {
+      "sessions": 1,
+      "user_msgs": 446,
+      "assistant_msgs": 446,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 31966.937983333333
+    },
+    "2026-03-12": {
+      "sessions": 4,
+      "user_msgs": 34,
+      "assistant_msgs": 34,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 15982.507199999998
+    },
+    "2026-03-24": {
+      "sessions": 1,
+      "user_msgs": 141,
+      "assistant_msgs": 141,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 4396.559433333333
+    },
+    "2026-03-25": {
+      "sessions": 1,
+      "user_msgs": 37,
+      "assistant_msgs": 37,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 283.7038333333333
+    },
+    "2026-03-26": {
+      "sessions": 2,
+      "user_msgs": 129,
+      "assistant_msgs": 129,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 3010.4588666666664
+    },
+    "2026-03-31": {
+      "sessions": 4,
+      "user_msgs": 37,
+      "assistant_msgs": 37,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 1081.3324166666666
+    },
+    "2026-04-01": {
+      "sessions": 1,
+      "user_msgs": 120,
+      "assistant_msgs": 120,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "minutes": 1517.5707666666667
+    },
     "2026-04-06": {
       "sessions": 36,
       "user_msgs": 595,
@@ -90,15 +186,29 @@
       "assistant_msgs": 661,
       "input_tokens": 67295395,
       "output_tokens": 316260,
-      "minutes": 456.6081666666667
+      "minutes": 459.678
     },
     "2026-04-16": {
       "sessions": 1,
-      "user_msgs": 270,
-      "assistant_msgs": 411,
-      "input_tokens": 71553695,
-      "output_tokens": 100511,
-      "minutes": 116.64728333333333
+      "user_msgs": 297,
+      "assistant_msgs": 452,
+      "input_tokens": 83338043,
+      "output_tokens": 114973,
+      "minutes": 129.9598
     }
-  }
+  },
+  "top_projects": [
+    [
+      "campaignai",
+      2726687186
+    ],
+    [
+      "clitunes",
+      1088432313
+    ],
+    [
+      "ch4p",
+      125553478
+    ]
+  ]
 }
