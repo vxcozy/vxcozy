@@ -19,6 +19,8 @@
 ### `$ whoami`
 
 an alchemist. cozy, as one should imagine.
+<br/>
+<br/>
 i make tools for builders, w/ specializations across design, engineering, and product. currently shipping AI-powered dev tools and open source infrastructure.
 
 - building at **[@premian-labs](https://github.com/premian-labs)**
