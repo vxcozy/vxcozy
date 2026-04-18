@@ -19,10 +19,10 @@
 ### `$ whoami`
 
 an alchemist. cozy, as one should imagine.
-i make tools for builders. currently shipping AI-powered dev tools and open source infrastructure.
+i make tools for builders, w/ specializations across design, engineering, and product. currently shipping AI-powered dev tools and open source infrastructure.
 
 - building at **[@premian-labs](https://github.com/premian-labs)**
-- crafting **Claude Code skills** and **Agentic tooling**
+- Focused on **agent infrastructure**, **decentralized protocols**, and **creative tooling**.
 - mass adoption idealist — interfaces should feel like magic
 
 ---
