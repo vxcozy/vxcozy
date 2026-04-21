@@ -52,6 +52,13 @@ done
 # Only commit if something actually changed.
 if git diff --quiet -- graph/claude-stats.json graph/claude-card.svg; then
   echo "no stats changes"
+  # Flush any commits a previous run made but failed to push (e.g. transient
+  # auth/network failure). Without this, identical regen output would mask a
+  # stale local branch forever.
+  if [[ -n "$(git rev-list "origin/$BRANCH..HEAD" 2>/dev/null)" ]]; then
+    echo "pushing pending local commits"
+    git push origin "$BRANCH"
+  fi
   exit 0
 fi
 
