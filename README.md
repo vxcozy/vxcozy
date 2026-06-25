@@ -23,9 +23,9 @@ an alchemist. cozy, as one should imagine.
 <br/>
 i make tools for builders, w/ specializations across design, engineering, and product. currently shipping AI-powered dev tools and open source infrastructure.
 
-- building at **[@premian-labs](https://github.com/premian-labs)** & **[@k2-vp](https://github.com/k2-vp)**
-- Focused on **agent infrastructure**, **decentralized protocols**, and **creative tooling**.
-- mass adoption idealist — interfaces should feel like magic
+- building at **[@k2-vp](https://github.com/k2-vp)** & **[@premian-labs](https://github.com/premian-labs)**
+- Focused on **agent infrastructure**, **decentralized protocols**, **design**, and **creative tooling**.
+- mass adoption idealist. interfaces should feel like magic
 
 ---
 
