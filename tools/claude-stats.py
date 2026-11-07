@@ -12,6 +12,11 @@ Usage:
     python3 claude-stats.py                                    # defaults
     python3 claude-stats.py --dir ~/.claude --out ./graph
     python3 claude-stats.py --dir ~/.claude --dir /path/.claude --out ./graph
+    python3 claude-stats.py \\
+        --dir ~/.claude --dir ~/synced/laptop/.claude \\
+        --desktop-dir "~/Library/Application Support/Claude/claude-code-sessions" \\
+        --desktop-dir ~/synced/laptop/claude-code-sessions \\
+        --out ./graph
 """
 
 import argparse
@@ -23,20 +28,27 @@ from collections import defaultdict
 from pathlib import Path
 
 
-DESKTOP_SESSIONS_DIR = os.path.expanduser(
+DEFAULT_DESKTOP_SESSIONS_DIR = os.path.expanduser(
     "~/Library/Application Support/Claude/claude-code-sessions"
 )
 
 
-def count_desktop_accounts() -> int:
-    """Count distinct accounts from the desktop app session directory."""
-    if not os.path.isdir(DESKTOP_SESSIONS_DIR):
-        return 1
-    accounts = [
-        d for d in os.listdir(DESKTOP_SESSIONS_DIR)
-        if os.path.isdir(os.path.join(DESKTOP_SESSIONS_DIR, d))
-        and not d.startswith(".")
-    ]
+def count_desktop_accounts(desktop_dirs: list[str]) -> int:
+    """Count distinct accounts across one or more desktop session directories.
+
+    Accounts are identified by their subdirectory name, which is stable across
+    machines for the same account — so syncing multiple machines' session dirs
+    and unioning the account names gives a correct distinct-account count.
+    """
+    accounts: set[str] = set()
+    for desktop_dir in desktop_dirs:
+        if not os.path.isdir(desktop_dir):
+            continue
+        for d in os.listdir(desktop_dir):
+            if d.startswith("."):
+                continue
+            if os.path.isdir(os.path.join(desktop_dir, d)):
+                accounts.add(d)
     return max(len(accounts), 1)
 
 
@@ -44,10 +56,16 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Aggregate Claude Code session stats")
     parser.add_argument("--dir", dest="dirs", action="append", default=[],
                         help="Claude config directory (repeatable)")
+    parser.add_argument("--desktop-dir", dest="desktop_dirs", action="append", default=[],
+                        help="Desktop app claude-code-sessions directory (repeatable)")
     parser.add_argument("--out", default=".", help="Output directory")
     args = parser.parse_args()
     if not args.dirs:
         args.dirs = [os.path.expanduser("~/.claude")]
+    if not args.desktop_dirs:
+        args.desktop_dirs = [DEFAULT_DESKTOP_SESSIONS_DIR]
+    else:
+        args.desktop_dirs = [os.path.expanduser(d) for d in args.desktop_dirs]
     return args
 
 
@@ -124,15 +142,20 @@ def parse_session_jsonl(jsonl_path: str) -> dict | None:
 # Session parsing — desktop app metadata (supplementary)
 # ---------------------------------------------------------------------------
 
-def parse_desktop_sessions() -> list[dict]:
-    """Parse desktop app session metadata for all accounts."""
-    if not os.path.isdir(DESKTOP_SESSIONS_DIR):
-        return []
-
+def parse_desktop_sessions(desktop_dirs: list[str]) -> list[dict]:
+    """Parse desktop app session metadata for all accounts across all dirs."""
     sessions = []
     seen_cli_ids: set[str] = set()
 
-    for meta_path in glob.glob(os.path.join(DESKTOP_SESSIONS_DIR, "*", "*", "*.json")):
+    meta_paths: list[str] = []
+    for desktop_dir in desktop_dirs:
+        if not os.path.isdir(desktop_dir):
+            continue
+        meta_paths.extend(
+            glob.glob(os.path.join(desktop_dir, "*", "*", "*.json"))
+        )
+
+    for meta_path in meta_paths:
         try:
             with open(meta_path) as f:
                 meta = json.load(f)
@@ -226,7 +249,7 @@ def resolve_project_from_path(proj_dir_name: str) -> str:
     return name
 
 
-def aggregate(dirs: list[str]) -> dict:
+def aggregate(dirs: list[str], desktop_dirs: list[str]) -> dict:
     sessions_by_id: dict[str, dict] = {}
 
     # 1. Parse full JSONL sessions (these have the best data)
@@ -244,13 +267,13 @@ def aggregate(dirs: list[str]) -> dict:
             sessions_by_id[session["cli_session_id"]] = session
 
     # 2. Fill in gaps from desktop metadata (only for sessions not already parsed)
-    for desktop_session in parse_desktop_sessions():
+    for desktop_session in parse_desktop_sessions(desktop_dirs):
         cli_id = desktop_session["cli_session_id"]
         if cli_id not in sessions_by_id:
             sessions_by_id[cli_id] = desktop_session
 
     # 3. Count distinct accounts from desktop app (all accounts, not just gap-fill)
-    num_accounts = count_desktop_accounts()
+    num_accounts = count_desktop_accounts(desktop_dirs)
 
     # 4. Aggregate into daily buckets + project buckets
     daily = defaultdict(lambda: {
@@ -587,7 +610,7 @@ def main():
     args = parse_args()
     os.makedirs(args.out, exist_ok=True)
 
-    stats = aggregate(args.dirs)
+    stats = aggregate(args.dirs, args.desktop_dirs)
 
     json_path = os.path.join(args.out, "claude-stats.json")
     with open(json_path, "w") as f:

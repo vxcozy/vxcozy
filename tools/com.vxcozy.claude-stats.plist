@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  launchd agent for regenerating the Claude Code activity card.
+
+  Install on the aggregator Mac only (the one with all three machines'
+  session data synced locally). See tools/claude-stats-setup.md for the
+  full procedure.
+
+  Placeholders to replace before installing:
+    __REPO_DIR__     absolute path to your vxcozy checkout
+                     (e.g. /Users/coin/Documents/GitHub/vxcozy)
+    __HOME__         your home dir (e.g. /Users/coin)
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.vxcozy.claude-stats</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>__REPO_DIR__/tools/update-claude-stats.sh</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>REPO_DIR</key>
+    <string>__REPO_DIR__</string>
+    <key>BRANCH</key>
+    <string>main</string>
+    <!-- Customize if your Syncthing layout differs. Paths joined with ':'. -->
+    <key>CLAUDE_DIRS</key>
+    <string>__HOME__/.claude:__HOME__/synced/work-laptop/.claude:__HOME__/synced/personal-laptop/.claude</string>
+    <key>DESKTOP_DIRS</key>
+    <string>__HOME__/Library/Application Support/Claude/claude-code-sessions:__HOME__/synced/work-laptop/claude-code-sessions:__HOME__/synced/personal-laptop/claude-code-sessions</string>
+    <!-- launchd has a minimal PATH; include Homebrew + git. -->
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+
+  <!-- Run daily at 05:30 local (before 06:23 UTC contributions workflow). -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>5</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+
+  <!-- If the Mac was asleep at 05:30, run on next wake. -->
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>__HOME__/Library/Logs/claude-stats.log</string>
+  <key>StandardErrorPath</key>
+  <string>__HOME__/Library/Logs/claude-stats.log</string>
+</dict>
+</plist>
